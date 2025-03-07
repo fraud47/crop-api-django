@@ -14,6 +14,13 @@ class FarmCreateView(generics.CreateAPIView):
     serializer_class = FarmSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
+
+    def get_permissions(self):
+        if self.request.method == 'POST':  # Allow only authenticated users to create
+            return [permissions.IsAuthenticated()]
+        return [permissions.IsAuthenticated(), IsAdmin()]
+
+
     @swagger_auto_schema(
         operation_description="create farm ",  # Description of what the GET endpoint does
         responses={200: FarmSerializer()}  # Expected response: 200 status with a list of MyModel instances serialized
